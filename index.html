@@ -8,9 +8,9 @@
 :root{--green:#90bc79;--mustard:#d9bf65;--ink:#253b2b;--paper:#fafbf6}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}
 header{max-width:1180px;margin:auto;padding:24px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #dfe5d8}
-.brand{font-weight:700;font-size:19px}button,.button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:14px 22px;background:var(--ink);color:white;text-decoration:none;display:inline-block}
+.brand{display:block;flex:0 1 180px;min-width:0}.brand-logo{display:block;width:100%;height:auto}header>button{flex-shrink:0}button,.button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:14px 22px;background:var(--ink);color:white;text-decoration:none;display:inline-block}
 button:hover,.button:hover{background:#39533f}button:focus-visible,a:focus-visible{outline:3px solid #9a7919;outline-offset:4px}
-main{max-width:1050px;margin:auto;text-align:center;padding:36px 22px 70px}.logo{display:block;width:min(100%,570px);height:auto;margin:0 auto 28px;border-radius:18px}
+main{max-width:1050px;margin:auto;text-align:center;padding:36px 22px 70px}
 .eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:700;color:#586d4e}
 h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(36px,6vw,66px);line-height:1.1;margin:20px 0}
 .intro{font-size:18px;line-height:1.7;max-width:520px;margin:0 auto 28px;color:#52614e}
@@ -22,13 +22,12 @@ h2{font-size:20px;margin:0 0 7px}.hint{font-size:13px;margin:0;color:#52614e}.cl
 iframe{display:block;border:0;width:100%;height: min(60dvh,620px);background:#fff}
 .modal-foot{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:white;flex-wrap:wrap}
 a{color:#35552c}.fallback{font-size:13px;line-height:1.5}body.modal-open{overflow:hidden}
-@media(max-width:480px){header{padding:18px}.brand{font-size:16px}header button{padding:11px 14px}.modal-head{padding:14px}h2{font-size:18px}.modal-foot{padding:12px}.logo{margin-bottom:18px}main{padding-top:22px}}
+@media(max-width:480px){header{padding:18px}.brand{flex-basis:135px}header button{padding:11px 14px}.modal-head{padding:14px}h2{font-size:18px}.modal-foot{padding:12px}main{padding-top:22px}}
 </style>
 </head>
 <body>
-<header><span class="brand"><span lang="kn">ವಿಶ್ವಾಸ</span> Estates</span><button type="button" data-open>Enquire now</button></header>
+<header><a class="brand" href="./" aria-label="ವಿಶ್ವಾಸ Estates home"><img class="brand-logo" src="assets/vishwas-estates-logo.jpg" alt="ವಿಶ್ವಾಸ Estates — by vishwanath E" width="1536" height="1024"></a><button type="button" data-open>Enquire now</button></header>
 <main>
-<img class="logo" src="assets/vishwas-estates-logo.jpg" alt="ವಿಶ್ವಾಸ Estates — by vishwanath E" width="1536" height="1024">
 <p class="eyebrow">A personal approach to property</p>
 <h1>Trust Built in Person.</h1>
 <p class="intro">Every property journey starts with a conversation.<br>Tell us what you’re looking for.</p>
