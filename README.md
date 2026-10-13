@@ -12,7 +12,7 @@ In Settings > Pages, choose Deploy from a branch, main, /(root), then Save. Cust
 
 https://forms.gle/XMmygcHWyMQBwqot8
 
-The existing form-bound Apps Script sends enquiries to vishwasestates@dkalki.com. No credentials or response data are included here. Keep the response spreadsheet Restricted. Google owns the iframe content and validation; the page does not attempt to infer successful submission from iframe load events. Close the dialog after Google's confirmation.
+The enquiry email address is visvasaestates@dkalki.com. The form-bound Google Apps Script is managed outside this repository; its notification recipient must also be set to this address. No credentials or response data are included here. Keep the response spreadsheet Restricted. Google owns the iframe content and validation; the page does not attempt to infer successful submission from iframe load events. Close the dialog after Google's confirmation.
 
 ## Check after publishing
 
