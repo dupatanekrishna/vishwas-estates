@@ -54,6 +54,16 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 #google-results .gs-webResult .gs-snippet{font-size:12px!important;line-height:1.5!important;color:#344537!important}
 #google-results .gsc-results{width:100%!important}
 @media(max-width:640px){.search-results{max-height:min(290px,45dvh);background:rgba(250,251,246,.9)}}
+
+/* Keep navigation outside the scrollable result list. */
+.search-results{height:min(310px,48dvh);display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;overflow:hidden;scrollbar-gutter:auto;overflow-anchor:none}
+#google-results{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;min-height:0;overflow-anchor:none}
+#google-results .gsc-cursor-box{display:none!important}
+.search-pagination{display:flex;align-items:center;justify-content:center;gap:16px;padding-top:8px;border-top:1px solid #253b2b1a;font-size:12px}
+.search-pagination[hidden]{display:none}
+.search-pagination button{padding:5px 12px;font-size:12px}
+.search-pagination button:disabled{opacity:.4;cursor:default}
+@media(max-width:640px){.search-results{height:min(290px,45dvh)}}
 </style>
 </head>
 <body>
@@ -67,7 +77,8 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 </form><p id="search-help" class="search-help">Search builder websites with Google. Results appear below; suggestions are provided by this website.</p>
 <div id="search-results" class="search-results" hidden role="region" tabindex="0" aria-labelledby="results-title">
 <div class="results-heading"><h2 id="results-title">Search results</h2><button id="close-results" class="secondary" type="button">Close results</button></div>
-<p id="search-status" role="status" aria-live="polite"></p><div id="google-results"></div></div>
+<p id="search-status" role="status" aria-live="polite"></p><div id="google-results"></div>
+<nav id="search-pagination" class="search-pagination" aria-label="Search result pages" hidden><button id="results-prev" class="secondary" type="button">Previous</button><span id="results-page" aria-live="polite">Page 1</span><button id="results-next" class="secondary" type="button">Next</button></nav></div>
 <noscript><p>Enable JavaScript to search builder websites on this page.</p></noscript>
 </section>
 
@@ -167,6 +178,45 @@ openEnquiry();
   });
   const results = document.getElementById('search-results');
   const status = document.getElementById('search-status');
+  const googleResults = document.getElementById('google-results');
+  const pagination = document.getElementById('search-pagination');
+  const previous = document.getElementById('results-prev');
+  const next = document.getElementById('results-next');
+  const pageLabel = document.getElementById('results-page');
+  let pageAnchor = null;
+  function syncPagination() {
+    const pages = [...googleResults.querySelectorAll('.gsc-cursor-page')];
+    const current = pages.findIndex(page => page.classList.contains('gsc-cursor-current-page'));
+    pagination.hidden = current < 0 || pages.length < 2;
+    previous.disabled = current <= 0;
+    next.disabled = current < 0 || current >= pages.length - 1;
+    if (current >= 0) pageLabel.textContent = 'Page ' + pages[current].textContent.trim();
+  }
+  function restorePagePosition() {
+    if (pageAnchor) window.scrollTo({left:pageAnchor.x, top:pageAnchor.y, behavior:'instant'});
+  }
+  function changePage(direction) {
+    const pages = [...googleResults.querySelectorAll('.gsc-cursor-page')];
+    const current = pages.findIndex(page => page.classList.contains('gsc-cursor-current-page'));
+    const target = pages[current + direction];
+    if (current < 0 || !target) return;
+    pageAnchor = {x:window.scrollX, y:window.scrollY};
+    previous.disabled = next.disabled = true;
+    status.textContent = 'Loading page ' + target.textContent.trim() + '…';
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      pageAnchor = null;
+      syncPagination();
+      status.textContent = 'Google is taking longer than expected. Please try again.';
+    }, 20000);
+    target.click();
+    restorePagePosition();
+    requestAnimationFrame(restorePagePosition);
+  }
+  previous.addEventListener('click', () => changePage(-1));
+  next.addEventListener('click', () => changePage(1));
+  window.addEventListener('wheel', () => { pageAnchor = null; }, {passive:true});
+  window.addEventListener('touchstart', () => { pageAnchor = null; }, {passive:true});
   let ready = false;
   let loading = false;
   let pending = '';
@@ -177,6 +227,8 @@ openEnquiry();
   }
   function runQuery(query) {
     clearTimeout(timer);
+    pageAnchor = null;
+    pagination.hidden = true;
     status.textContent = 'Searching for ' + query + '…';
     timer = setTimeout(() => {
       status.textContent = 'Google is taking longer than expected. Please try Search again.';
@@ -218,8 +270,12 @@ openEnquiry();
           if (gname !== 'vishwas-results') return;
           clearTimeout(timer);
           status.textContent = 'Results for ' + query;
-          // Google replaces the result rows during pagination. Reset only this panel.
-          requestAnimationFrame(() => { results.scrollTop = 0; });
+          syncPagination();
+          requestAnimationFrame(() => {
+            googleResults.scrollTop = 0;
+            restorePagePosition();
+            requestAnimationFrame(() => { restorePagePosition(); pageAnchor = null; });
+          });
         }
       }}
     };
@@ -238,6 +294,7 @@ openEnquiry();
   });
   function closeResults(restoreFocus) {
     results.hidden = true;
+    pageAnchor = null;
     pending = '';
     clearTimeout(timer);
     if (restoreFocus) input.focus();
