@@ -16,7 +16,10 @@ dialog{padding:0;border:1px solid #dce5d6;border-radius:18px;width:min(760px,cal
 .web-search{padding-top:26px}.search-bar{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);background:white;border:1px solid #bccbad;border-radius:12px;box-shadow:0 5px 20px #253b2b08}.search-keyword{position:relative;display:flex;align-items:center;gap:12px;padding:17px 20px;min-width:0}.search-keyword>span{font-size:25px;color:#6a7e58}.search-keyword input{width:100%;min-width:0;border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);outline:none}.search-bar:focus-within{outline:2px solid #819c65;outline-offset:3px}.search-location{display:flex;align-items:center;gap:10px;padding:12px;border-left:1px solid var(--line);background:#f2f5ec;border-radius:0 12px 12px 0}.search-location label{flex:1;min-width:0}.search-location label span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-left:4px}.search-location select{width:100%;font:inherit;font-size:14px;color:var(--ink);border:0;background:transparent;padding:4px 0;cursor:pointer}.search-submit{padding:11px 14px;font-size:14px}.search-help{font-size:11px;color:var(--muted);margin:9px 3px 0}.search-suggestions{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:5;background:white;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px #253b2b20;overflow:hidden}.search-suggestions[hidden]{display:none}.search-option{padding:12px 20px;cursor:pointer;font-size:14px;overflow-wrap:anywhere}.search-option[aria-selected="true"],.search-option:hover{background:#edf3e5}.search-option small{display:block;color:var(--muted);font-size:11px}
 @media(max-width:640px){.web-search{padding-top:18px}.search-keyword{padding:14px 12px;gap:7px}.search-keyword input{font-size:16px}.search-location{padding:8px;flex-wrap:wrap;gap:4px}.search-location label{flex-basis:100%}.search-location select{font-size:12px}.search-submit{width:100%;padding:5px 8px;font-size:12px}.search-location label span{font-size:8px}.search-option{padding:12px}.search-help{font-size:10px}}
 
-.search-results{margin-top:24px;padding:24px;background:#fff;border:1px solid var(--line);border-radius:12px;min-width:0}.search-results[hidden]{display:none}.results-heading{display:flex;justify-content:space-between;align-items:center;gap:16px}.results-heading h2{font-size:28px;margin:0}.results-heading button{font-size:12px;padding:9px 13px}#search-status{font-size:13px;color:var(--muted);margin:12px 0}#google-results{min-width:0;overflow-wrap:anywhere}#google-results .gsc-control-cse{padding:0;border:0}#google-results .gsc-control-cse,#google-results .gsc-control-cse .gsc-table-result{font-family:Arial,sans-serif}@media(max-width:640px){.search-results{padding:15px}.results-heading h2{font-size:23px}}
+.web-search{position:relative;z-index:3}
+.search-results{position:absolute;top:100%;left:0;right:0;margin-top:8px;padding:14px 18px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px #253b2b24;min-width:0;max-height:min(380px,55dvh);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.search-results[hidden]{display:none}.results-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.results-heading h2{font-family:Arial,sans-serif;font-size:15px;font-weight:600;letter-spacing:0;margin:0}.results-heading button{font-size:12px;padding:5px 10px}#search-status{font-size:11px;color:var(--muted);margin:8px 0}#google-results{min-width:0;overflow-wrap:anywhere}#google-results .gsc-control-cse{padding:0;border:0}#google-results .gsc-control-cse,#google-results .gsc-control-cse .gsc-table-result{font-family:Arial,sans-serif;font-size:13px}
+@media(max-width:640px){.search-results{padding:12px;max-height:min(340px,50dvh)}.results-heading h2{font-size:14px}}
 </style>
 </head>
 <body>
@@ -28,7 +31,7 @@ dialog{padding:0;border:1px solid #dce5d6;border-radius:18px;width:min(760px,cal
 <div class="search-keyword"><span aria-hidden="true">⌕</span><input id="web-query" name="q" type="text" placeholder="Search a brand, property or anything…" aria-label="Search Google" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="web-suggestions" aria-describedby="search-help" autocomplete="off" required maxlength="250"><div id="web-suggestions" class="search-suggestions" role="listbox" aria-label="Suggested searches" hidden></div></div>
 <div class="search-location"><label for="web-area"><span>Bengaluru area</span><select id="web-area"><option value="">All Bengaluru</option><option>Whitefield</option><option>HSR Layout</option><option>Electronic City</option><option>Marathahalli</option><option>Sarjapur Road</option><option>Bellandur</option><option>Koramangala</option><option>Indiranagar</option><option>Jayanagar</option><option>JP Nagar</option><option>BTM Layout</option><option>Hebbal</option><option>Yelahanka</option><option>Devanahalli</option><option>KR Puram</option><option>Kengeri</option><option>Banashankari</option><option>Rajajinagar</option><option>Malleshwaram</option><option>Hennur</option><option>Thanisandra</option><option>Bannerghatta Road</option></select></label><button class="search-submit" type="submit" aria-label="Show search results below">Search</button></div>
 </form><p id="search-help" class="search-help">Search builder websites with Google. Results appear below; suggestions are provided by this website.</p>
-<div id="search-results" class="search-results" hidden aria-labelledby="results-title">
+<div id="search-results" class="search-results" hidden role="region" tabindex="0" aria-labelledby="results-title">
 <div class="results-heading"><h2 id="results-title">Search results</h2><button id="close-results" class="secondary" type="button">Close results</button></div>
 <p id="search-status" role="status" aria-live="polite"></p><div id="google-results"></div></div>
 <noscript><p>Enable JavaScript to search builder websites on this page.</p></noscript>
@@ -197,12 +200,19 @@ openEnquiry();
   area.addEventListener('change', () => {
     if (!results.hidden && input.value.trim()) search();
   });
-  document.getElementById('close-results').addEventListener('click', () => {
+  function closeResults(restoreFocus) {
     results.hidden = true;
     pending = '';
     clearTimeout(timer);
-    input.focus();
+    if (restoreFocus) input.focus();
     closeSuggestions();
+  }
+  document.getElementById('close-results').addEventListener('click', () => closeResults(true));
+  document.addEventListener('pointerdown', event => {
+    if (!results.hidden && !event.target.closest('.web-search')) closeResults(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !results.hidden) closeResults(true);
   });
 })();
 </script>
