@@ -11,12 +11,23 @@ dialog{padding:0;border:1px solid #dce5d6;border-radius:18px;width:min(760px,cal
 @media(max-width:850px){.wrap{width:calc(100% - 40px)}nav{gap:16px}.hero{gap:30px;padding:48px 0}.scene{min-height:370px}.scene svg{height:300px}.about-inner{gap:35px}.contact{padding:30px}.card{padding:23px}.header-inner{gap:18px}}
 @media(max-width:640px){.wrap{width:calc(100% - 36px)}.header-inner{flex-wrap:wrap;gap:8px;padding:8px 0 14px}.brand{flex-basis:132px}.header-inner>button{margin-left:auto;font-size:12px;padding:11px 15px}nav{order:3;width:100%;justify-content:space-between;gap:12px;margin:0;border-top:1px solid var(--line);padding-top:12px}nav a{font-size:12px}.hero{grid-template-columns:1fr;gap:32px;padding:42px 0}h1{font-size:53px}.intro{font-size:16px}.scene{min-height:320px;border-radius:120px 120px 8px 8px}.scene svg{height:270px}.ribbon .wrap{flex-wrap:wrap;justify-content:center;gap:8px 20px;font-size:11px}.section{padding:55px 0}.section-top{display:block}.section-top>p{margin-top:20px}.cards,.steps,.about-inner{grid-template-columns:1fr;gap:18px}.card .number{margin-bottom:16px}.card{padding:27px}.about-inner{gap:12px}.steps{gap:22px}.step .number{margin-bottom:12px}.contact{display:block;padding:30px 24px}.contact .actions{margin-top:25px}.faq{padding:50px 0}.footer-inner{display:block}.footer-inner>p{margin-top:14px}.modal-head{padding:14px}.modal-head h2{font-size:18px}.modal-foot{padding:12px}.eyebrow{font-size:10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Web search */
+.web-search{padding-top:26px}.search-bar{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);background:white;border:1px solid #bccbad;border-radius:12px;box-shadow:0 5px 20px #253b2b08}.search-keyword{position:relative;display:flex;align-items:center;gap:12px;padding:17px 20px;min-width:0}.search-keyword>span{font-size:25px;color:#6a7e58}.search-keyword input{width:100%;min-width:0;border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);outline:none}.search-bar:focus-within{outline:2px solid #819c65;outline-offset:3px}.search-location{display:flex;align-items:center;gap:10px;padding:12px;border-left:1px solid var(--line);background:#f2f5ec;border-radius:0 12px 12px 0}.search-location label{flex:1;min-width:0}.search-location label span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-left:4px}.search-location select{width:100%;font:inherit;font-size:14px;color:var(--ink);border:0;background:transparent;padding:4px 0;cursor:pointer}.search-submit{padding:11px 14px;font-size:14px}.search-help{font-size:11px;color:var(--muted);margin:9px 3px 0}.search-suggestions{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:5;background:white;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px #253b2b20;overflow:hidden}.search-suggestions[hidden]{display:none}.search-option{padding:12px 20px;cursor:pointer;font-size:14px;overflow-wrap:anywhere}.search-option[aria-selected="true"],.search-option:hover{background:#edf3e5}.search-option small{display:block;color:var(--muted);font-size:11px}
+@media(max-width:640px){.web-search{padding-top:18px}.search-keyword{padding:14px 12px;gap:7px}.search-keyword input{font-size:16px}.search-location{padding:8px;flex-wrap:wrap;gap:4px}.search-location label{flex-basis:100%}.search-location select{font-size:12px}.search-submit{width:100%;padding:5px 8px;font-size:12px}.search-location label span{font-size:8px}.search-option{padding:12px}.search-help{font-size:10px}}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap header-inner"><a class="brand" href="./" aria-label="ವಿಶ್ವಾಸ Estates home"><img class="brand-logo" src="assets/vishwas-estates-logo.jpg" alt="ವಿಶ್ವಾಸ Estates — by Vishwanath E" width="1536" height="1024"></a><nav aria-label="Main navigation"><a href="#property">Property enquiries</a><a href="#about">About us</a><a href="#process">How it works</a><a href="#contact">Contact</a></nav><button type="button" data-open>Enquire now <span aria-hidden="true">↗</span></button></div></header>
 <main id="main">
+<section class="wrap web-search" aria-label="Search the web">
+<form id="web-search" class="search-bar" action="https://www.google.com/search" method="get" target="_blank" rel="noopener noreferrer" role="search">
+<div class="search-keyword"><span aria-hidden="true">⌕</span><input id="web-query" name="q" type="text" placeholder="Search a brand, property or anything…" aria-label="Search Google" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="web-suggestions" aria-describedby="search-help" autocomplete="off" required maxlength="250"><div id="web-suggestions" class="search-suggestions" role="listbox" aria-label="Suggested searches" hidden></div></div>
+<div class="search-location"><label for="web-area"><span>Bengaluru area</span><select id="web-area"><option value="">All Bengaluru</option><option>Whitefield</option><option>HSR Layout</option><option>Electronic City</option><option>Marathahalli</option><option>Sarjapur Road</option><option>Bellandur</option><option>Koramangala</option><option>Indiranagar</option><option>Jayanagar</option><option>JP Nagar</option><option>BTM Layout</option><option>Hebbal</option><option>Yelahanka</option><option>Devanahalli</option><option>KR Puram</option><option>Kengeri</option><option>Banashankari</option><option>Rajajinagar</option><option>Malleshwaram</option><option>Hennur</option><option>Thanisandra</option><option>Bannerghatta Road</option></select></label><button class="search-submit" type="submit" aria-label="Search Google in a new tab">Search ↗</button></div>
+</form><p id="search-help" class="search-help">Searches open on Google in a new tab. Suggestions are provided by this website.</p>
+</section>
+
 <section class="wrap hero" aria-labelledby="hero-title"><div><p class="eyebrow">A personal approach to property</p><h1 id="hero-title">Trust Built<br><em>in Person.</em></h1><p class="intro">Every property journey starts with a conversation.<br>Tell us what you’re looking for.</p><div class="actions"><button type="button" data-open>Share your requirement <span aria-hidden="true">↗</span></button><a class="text-link" href="#property">Explore enquiries ↓</a></div><p class="hero-caption">ವಿಶ್ವಾಸ Estates · by Vishwanath E</p></div>
 <div class="scene" aria-hidden="true"><svg viewBox="0 0 480 360" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="349" cy="91" r="48" fill="#DAC679"/><path d="M0 279Q145 214 283 276T480 253V360H0Z" fill="#BDCCA9"/><path d="M46 307L153 275L423 296L312 344Z" fill="#9DAD86"/><path d="M160 163L304 136L384 178L241 207Z" fill="#F8F6E9"/><path d="M160 163V285L241 324V207Z" fill="#D8D6BF"/><path d="M241 207L384 178V291L241 324Z" fill="#F6F1DC"/><path d="M151 157L303 125L396 176L384 186L303 144L160 173Z" fill="#617451"/><path d="M184 201L220 218V275L184 258Z" fill="#6B7C5D"/><path d="M264 224L309 215V307L264 317Z" fill="#708360"/><path d="M326 211L364 204V251L326 259Z" fill="#9EB299"/><path d="M345 208V255M326 234L364 227" stroke="#F8F3DF" stroke-width="4"/><path d="M193 205V262" stroke="#C2CBB5" stroke-width="3"/><path d="M86 213V304M111 188V299" stroke="#667A51" stroke-width="5"/><ellipse cx="87" cy="198" rx="28" ry="48" fill="#94AD7D"/><ellipse cx="112" cy="170" rx="32" ry="55" fill="#A9BD8D"/><path d="M411 266V310" stroke="#667A51" stroke-width="4"/><circle cx="412" cy="257" r="22" fill="#8FA578"/><path d="M263 321L309 309L350 360H300Z" fill="#E5DEC0"/></svg><p class="scene-label"><span>Space for new beginnings</span><span>ವಿಶ್ವಾಸ</span></p></div></section>
 <div class="ribbon"><div class="wrap"><span>Your plans, your priorities</span><span>A conversation comes first</span><span>Take the next step at your pace</span></div></div>
@@ -46,6 +57,79 @@ document.getElementById('close').addEventListener('click',closeEnquiry);
 document.getElementById('skip').addEventListener('click',closeEnquiry);
 modal.addEventListener('close',()=>{document.body.classList.remove('modal-open');returnFocus.focus();});
 openEnquiry();
+</script>
+
+<script>
+(() => {
+  const form = document.getElementById('web-search');
+  const input = document.getElementById('web-query');
+  const area = document.getElementById('web-area');
+  const list = document.getElementById('web-suggestions');
+  let selected = -1;
+  let suggestions = [];
+  function locationText() { return [area.value, 'Bengaluru'].filter(Boolean).join(' '); }
+  function closeSuggestions() {
+    list.hidden = true;
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+    selected = -1;
+  }
+  function renderSuggestions() {
+    const term = input.value.trim();
+    suggestions = term
+      ? [term, term + ' official website', term + ' reviews', term + ' near me']
+      : ['Apartments for sale', 'Plots for sale', 'Homes for rent', 'Real estate builders'];
+    selected = -1;
+    input.removeAttribute('aria-activedescendant');
+    list.replaceChildren();
+    suggestions.forEach((text, index) => {
+      const option = document.createElement('div');
+      option.id = 'web-option-' + index;
+      option.className = 'search-option';
+      option.setAttribute('role', 'option');
+      option.setAttribute('aria-selected', 'false');
+      option.textContent = text;
+      const hint = document.createElement('small');
+      hint.textContent = 'Search Google · ' + locationText();
+      option.appendChild(hint);
+      option.addEventListener('pointerdown', event => event.preventDefault());
+      option.addEventListener('click', () => {
+        input.value = text;
+        closeSuggestions();
+        input.focus();
+        closeSuggestions();
+      });
+      list.appendChild(option);
+    });
+    list.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+  }
+  input.addEventListener('input', renderSuggestions);
+  input.addEventListener('focus', renderSuggestions);
+  input.addEventListener('blur', closeSuggestions);
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { closeSuggestions(); return; }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (list.hidden) renderSuggestions();
+      selected = (selected + (event.key === 'ArrowDown' ? 1 : -1) + suggestions.length) % suggestions.length;
+      [...list.children].forEach((option, index) => option.setAttribute('aria-selected', String(index === selected)));
+      input.setAttribute('aria-activedescendant', 'web-option-' + selected);
+    } else if (event.key === 'Enter' && !list.hidden && selected >= 0) {
+      event.preventDefault();
+      input.value = suggestions[selected];
+      closeSuggestions();
+    }
+  });
+  // FormData updates the submitted query without changing what the visitor typed.
+  form.addEventListener('formdata', event => {
+    event.formData.set('q', input.value.trim() + ' ' + locationText());
+  });
+  form.addEventListener('submit', event => {
+    if (!input.value.trim()) { event.preventDefault(); input.focus(); return; }
+    closeSuggestions();
+  });
+})();
 </script>
 </body>
 </html>
