@@ -195,7 +195,10 @@ openEnquiry();
   function restorePagePosition() {
     if (pageAnchor) window.scrollTo({left:pageAnchor.x, top:pageAnchor.y, behavior:'instant'});
   }
+  window.addEventListener('scroll', restorePagePosition, {passive:true});
+  let settleTimer;
   function changePage(direction) {
+    clearTimeout(settleTimer);
     const pages = [...googleResults.querySelectorAll('.gsc-cursor-page')];
     const current = pages.findIndex(page => page.classList.contains('gsc-cursor-current-page'));
     const target = pages[current + direction];
@@ -274,7 +277,7 @@ openEnquiry();
           requestAnimationFrame(() => {
             googleResults.scrollTop = 0;
             restorePagePosition();
-            requestAnimationFrame(() => { restorePagePosition(); pageAnchor = null; });
+            settleTimer = setTimeout(() => { restorePagePosition(); pageAnchor = null; }, 1000);
           });
         }
       }}
