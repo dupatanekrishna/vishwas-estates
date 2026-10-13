@@ -20,6 +20,38 @@ dialog{padding:0;border:1px solid #dce5d6;border-radius:18px;width:min(760px,cal
 .search-results{position:absolute;top:100%;left:0;right:0;margin-top:8px;padding:14px 18px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px #253b2b24;min-width:0;max-height:min(380px,55dvh);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
 .search-results[hidden]{display:none}.results-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.results-heading h2{font-family:Arial,sans-serif;font-size:15px;font-weight:600;letter-spacing:0;margin:0}.results-heading button{font-size:12px;padding:5px 10px}#search-status{font-size:11px;color:var(--muted);margin:8px 0}#google-results{min-width:0;overflow-wrap:anywhere}#google-results .gsc-control-cse{padding:0;border:0}#google-results .gsc-control-cse,#google-results .gsc-control-cse .gsc-table-result{font-family:Arial,sans-serif;font-size:13px}
 @media(max-width:640px){.search-results{padding:12px;max-height:min(340px,50dvh)}.results-heading h2{font-size:14px}}
+
+/* Keep Google's overlay layout inside the branded result dropdown. */
+#google-results .gsc-results-wrapper-overlay{
+ position:static!important;inset:auto!important;width:100%!important;height:auto!important;
+ max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;
+ border:0!important;box-shadow:none!important;overflow:visible!important;
+ background:transparent!important;z-index:auto!important
+}
+#google-results .gsc-results-wrapper-visible{display:block!important;visibility:visible!important}
+.gsc-modal-background-image,.gsc-modal-background-image-visible{display:none!important}
+#google-results .gsc-results-close-btn{display:none!important}
+.search-results{
+ background:rgba(250,251,246,.82);
+ backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+ max-height:min(310px,48dvh);box-shadow:0 8px 24px #253b2b18;
+ border-color:rgba(144,188,121,.5)
+}
+#google-results .gsc-control-cse,
+#google-results .gsc-control-wrapper-cse,
+#google-results .gsc-results,
+#google-results .gsc-webResult.gsc-result,
+#google-results .gsc-webResult.gsc-result:hover,
+#google-results .gs-webResult,
+#google-results .gsc-above-wrapper-area,
+#google-results .gsc-results .gsc-cursor-box,
+#google-results .gsc-results .gsc-cursor-page{background:transparent!important}
+#google-results .gsc-webResult.gsc-result{padding:10px 0!important;border:0!important;border-bottom:1px solid #253b2b1a!important}
+#google-results .gs-webResult .gs-title,
+#google-results .gs-webResult .gs-title *{font-size:14px!important;line-height:1.4!important;color:#253b2b!important}
+#google-results .gs-webResult .gs-snippet{font-size:12px!important;line-height:1.5!important;color:#344537!important}
+#google-results .gsc-results{width:100%!important}
+@media(max-width:640px){.search-results{max-height:min(290px,45dvh);background:rgba(250,251,246,.9)}}
 </style>
 </head>
 <body>
@@ -171,7 +203,7 @@ openEnquiry();
         try {
           window.google.search.cse.element.render({
             div: 'google-results', tag: 'searchresults-only', gname: 'vishwas-results',
-            attributes: { autoSearchOnLoad: false, linkTarget: '_self' }
+            attributes: { autoSearchOnLoad: false, linkTarget: '_self', webSearchResultSetSize: 5, enableOrderBy: false }
           });
           ready = true;
           loading = false;
