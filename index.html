@@ -80,6 +80,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 /* Preserve the honeypot without rendering it to visitors. */
 .sell-form label[hidden]{display:none!important}
 .sell-phone-hint{font-size:12px;font-weight:400;color:var(--muted);line-height:1.4} .sell-form .sell-price-hint,.sell-form .sell-remarks-count{font-size:12px;font-weight:400;color:var(--muted)}.sell-phone-hint.invalid{color:#a12626}.sell-form input[aria-invalid="true"]{border-color:#a12626}
+.sell-attachments{display:flex;flex-direction:column;gap:8px}.sell-attachments-title{font-weight:600;font-size:14px}.sell-add-files{align-self:flex-start;padding:9px 15px;font-size:14px}.sell-file-list{list-style:none;margin:0;padding:0;display:grid;gap:7px}.sell-file-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border:1px solid var(--line);border-radius:7px;background:#f6f9f3}.sell-file-name{min-width:0;overflow-wrap:anywhere;font-size:13px}.sell-file-remove{flex-shrink:0;background:transparent;color:var(--ink);padding:5px 9px;font-size:12px;border:1px solid #b8c7b0}.sell-file-remove:hover{background:#e8efe3;color:var(--ink)}
 .sell-action{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 @media(max-width:600px){.sell-form{grid-template-columns:1fr}}
 </style>
@@ -132,7 +133,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
   <label>Project start date (optional)<input name="projectStartDate" type="date" min="1900-01-01" max="2100-12-31"></label>
   <label>Location *<input name="location" maxlength="200" required></label>
   <label class="sell-wide">Remarks<textarea name="remarks" rows="2" maxlength="2000" placeholder="Any additional property details (optional)"></textarea><span id="sell-remarks-count" class="sell-remarks-count">0 / 2,000 characters</span></label>
-  <label class="sell-wide">Floor plan / Photos / Videos<input id="sell-files" type="file" name="files" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.mp4,.webm,image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"><span class="sell-note">Maximum 10 files / 200 MB total; each image or PDF up to 10 MB, video up to 100 MB.</span></label>
+  <div class="sell-wide sell-attachments"><span class="sell-attachments-title">Floor plan / Photos / Videos</span><input id="sell-files" type="file" name="files" multiple hidden tabindex="-1" accept=".jpg,.jpeg,.png,.webp,.pdf,.mp4,.webm,image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"><button type="button" class="sell-add-files secondary" id="sell-add-files">+ Add files</button><p class="sell-note">Add photos, floor plans and videos individually or in groups. Maximum 10 files / 200 MB total; images and PDFs up to 10 MB each, videos up to 100 MB each.</p><p class="sell-note" id="sell-files-count" aria-live="polite">No files selected.</p><ul id="sell-file-list" class="sell-file-list" aria-label="Selected attachments"></ul></div>
   <label class="sell-wide sell-consent"><input type="checkbox" id="sell-consent" name="consent" required><span>I consent to Visvasa Estates using my property details and attachments to respond to my enquiry. *</span></label>
   <label hidden>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
   <div class="sell-wide" id="sell-turnstile" aria-label="Bot protection"></div>

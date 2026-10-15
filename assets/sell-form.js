@@ -21,6 +21,64 @@
   const status = document.getElementById("sell-status");
   const consent = document.getElementById("sell-consent");
   const fileInput = document.getElementById("sell-files");
+  const addFilesButton = document.getElementById("sell-add-files");
+  const fileList = document.getElementById("sell-file-list");
+  const fileCount = document.getElementById("sell-files-count");
+  const selectedFiles = [];
+  function fileFingerprint(file) {
+    return [file.name, file.size, file.lastModified, file.type].join("|");
+  }
+  function renderSelectedFiles() {
+    fileList.replaceChildren();
+    const total = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+    fileCount.textContent = selectedFiles.length
+      ? selectedFiles.length + " of 10 files selected (" + (total / MiB).toFixed(2) + " MB of 200 MB)."
+      : "No files selected.";
+    selectedFiles.forEach((file, index) => {
+      const row = document.createElement("li");
+      const name = document.createElement("span");
+      name.className = "sell-file-name";
+      name.textContent = file.name + " (" + (file.size / MiB).toFixed(2) + " MB)";
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "sell-file-remove";
+      remove.textContent = "Remove";
+      remove.setAttribute("aria-label", "Remove " + file.name);
+      remove.disabled = busy || !!session;
+      remove.addEventListener("click", () => {
+        if (busy || session || completed) return;
+        selectedFiles.splice(index, 1);
+        renderSelectedFiles();
+      });
+      row.append(name, remove);
+      fileList.append(row);
+    });
+    addFilesButton.disabled = busy || !!session || completed || selectedFiles.length >= 10;
+  }
+  addFilesButton.addEventListener("click", () => {
+    if (!busy && !session && !completed) fileInput.click();
+  });
+  fileInput.addEventListener("change", () => {
+    if (busy || session || completed) { fileInput.value = ""; return; }
+    const incoming = Array.from(fileInput.files);
+    fileInput.value = "";
+    try {
+      const seen = new Set(selectedFiles.map(fileFingerprint));
+      const novel = incoming.filter(file => {
+        const key = fileFingerprint(file);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      const candidate = selectedFiles.concat(novel);
+      attachments(candidate); // validate individual formats/sizes and combined quotas before accepting
+      selectedFiles.push(...novel);
+      renderSelectedFiles();
+      message(novel.length ? novel.length + " file(s) added. Continue adding files or submit." : "These files were already selected.");
+    } catch (error) {
+      message(error.message);
+    }
+  });
   if (!dlg || !trigger || !form || !submit) return;
 
   let widgetId = null, widgetLoading = null, turnstileToken = "";
@@ -309,10 +367,11 @@
     updateButton();
     try {
       if (!session) {
-        const files = Array.from(fileInput.files);
+        const files = selectedFiles.slice();
         message("Creating a secure listing…");
         session = await create(files);
         lockFields(); // Prevent edits to a listing already accepted by AWS.
+        renderSelectedFiles();
       }
       await uploadFiles(session);
       message("Finishing your listing and notifying Visvasa Estates…");
@@ -328,5 +387,6 @@
       updateButton();
     }
   });
+  renderSelectedFiles();
   updateButton();
 })();
