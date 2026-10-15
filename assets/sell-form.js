@@ -48,7 +48,8 @@
       callback: token => { turnstileToken = token; updateButton(); },
       "expired-callback": () => {
         turnstileToken = "";
-        message("Security check expired. Please verify again.");
+        message("Security check expired. A fresh check is loading automatically.");
+        if (widgetId !== null && window.turnstile) window.turnstile.reset(widgetId);
         updateButton();
       },
       "error-callback": () => {
@@ -103,7 +104,7 @@
     if (internationalPhone || !window.intlTelInput) return;
     internationalPhone = window.intlTelInput(phoneInput, {
       initialCountry: "in",
-      separateDialCode: true,
+      separateDialCode: false, // Avoid displaying +91 twice when a user pastes an international number.
       nationalMode: true,
       loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/js/utils.js")
     });
@@ -143,6 +144,23 @@
   }
   phoneInput.addEventListener("input", validatePhone);
   phoneInput.addEventListener("blur", validatePhone);
+  const priceInput = form.elements.namedItem("askingPrice");
+  const remarksInput = form.elements.namedItem("remarks");
+  const remarksCount = document.getElementById("sell-remarks-count");
+  function updatePrice() {
+    const digits = priceInput.value.replace(/[^0-9]/g, "");
+    priceInput.value = digits ? Number(digits).toLocaleString("en-IN") : "";
+    priceInput.setCustomValidity(digits && (BigInt(digits) === 0n || BigInt(digits) > 1000000000000n) ? "Enter an amount between ₹1 and ₹1,00,00,00,00,000." : "");
+  }
+  priceInput.addEventListener("blur", updatePrice);
+  priceInput.addEventListener("input", () => {
+    const digits = priceInput.value.replace(/[^0-9]/g, "");
+    priceInput.value = digits;
+    priceInput.setCustomValidity("");
+  });
+  remarksInput.addEventListener("input", () => {
+    remarksCount.textContent = remarksInput.value.length.toLocaleString("en-IN") + " / 2,000 characters";
+  });
   function details() {
     const result = {};
     for (const key of fieldNames) {
@@ -151,6 +169,10 @@
     const normalizedPhone = validatePhone();
     if (!normalizedPhone) throw new Error("Enter a valid mobile number for the selected country.");
     result.phone = normalizedPhone;
+    result.askingPrice = result.askingPrice.replace(/,/g, "");
+    if (!/^[1-9][0-9]*$/.test(result.askingPrice) || BigInt(result.askingPrice) > 1000000000000n) {
+      throw new Error("Enter a valid asking price in INR.");
+    }
     if (Number(result.carpetArea) > Number(result.superBuiltUpArea)) {
       throw new Error("Carpet area cannot exceed super built-up area.");
     }
@@ -278,7 +300,7 @@
   form.addEventListener("submit",async event => {
     event.preventDefault();
     if (busy || completed) return;
-    if (!session) validatePhone();
+    if (!session) { validatePhone(); updatePrice(); }
     if (!session && (!form.reportValidity() || !consent.checked || !turnstileToken)) {
       message("Complete all required fields, consent and the security check.");
       return;
