@@ -74,6 +74,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 .sell-form label{display:grid;gap:5px;font-weight:600;font-size:14px}
 .sell-form input,.sell-form select,.sell-form textarea{font:inherit;padding:10px;border:1px solid #b8c7b0;border-radius:6px;min-width:0;width:100%;background:#fff;color:var(--ink)}
 .sell-wide{grid-column:1/-1}.sell-note{font-size:12px;color:var(--muted);margin:0}
+.sell-phone-hint{font-size:12px;font-weight:400;color:var(--muted);line-height:1.4}.sell-phone-hint.invalid{color:#a12626}.sell-form input[aria-invalid="true"]{border-color:#a12626}
 .sell-action{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 @media(max-width:600px){.sell-form{grid-template-columns:1fr}}
 </style>
@@ -114,7 +115,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
  <div class="modal-head"><img class="sell-header-logo" src="assets/vishwas-estates-logo.jpg" alt="Visvasa Estates logo" width="52" height="48"><div><h2 id="sell-title">List your property for sale</h2><p class="hint">Share property information securely with Visvasa Estates.</p></div><button type="button" class="close" id="sell-close" aria-label="Close sell form">×</button></div>
  <form id="sell-form" class="sell-form">
   <label>Name *<input name="name" maxlength="120" autocomplete="name" required></label>
-  <label>Phone *<input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" required></label>
+  <label>Phone *<input id="sell-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="9876543210" aria-describedby="sell-phone-hint" required><span id="sell-phone-hint" class="sell-phone-hint" aria-live="polite">10-digit Indian mobile number starting with 6–9; +91 optional.</span></label>
   <label>Email (optional)<input name="email" type="email" autocomplete="email" maxlength="200"></label>
   <label>Project / Property name *<input name="projectName" maxlength="160" required></label>
   <label>Configuration / topology *<input name="configuration" placeholder="2 BHK / Villa / Plot" maxlength="150" required></label>
