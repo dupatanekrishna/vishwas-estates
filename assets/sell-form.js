@@ -96,22 +96,50 @@
   }
   const phoneInput = form.elements.namedItem("phone");
   const phoneHint = document.getElementById("sell-phone-hint");
-  function normalizeIndianPhone(value) {
-    const stripped = String(value || "").replace(/[\s()-]/g, "");
-    const local = stripped.startsWith("+91") ? stripped.slice(3) : stripped;
-    return /^[6-9][0-9]{9}$/.test(local) ? local : null;
+  let internationalPhone = null;
+  let phoneReady = false;
+  let phoneLoading = null;
+  function setupPhone() {
+    if (internationalPhone || !window.intlTelInput) return;
+    internationalPhone = window.intlTelInput(phoneInput, {
+      initialCountry: "in",
+      separateDialCode: true,
+      nationalMode: true,
+      loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/js/utils.js")
+    });
+    const ready = internationalPhone.promise || Promise.resolve();
+    ready.then(() => { phoneReady = true; validatePhone(); updateButton(); })
+      .catch(() => { phoneReady = false; phoneHint.textContent = "Phone validation failed to load. Refresh the page."; updateButton(); });
+    phoneInput.addEventListener("countrychange", () => { validatePhone(); updateButton(); });
+  }
+  function loadPhone() {
+    if (internationalPhone) return Promise.resolve();
+    if (phoneLoading) return phoneLoading;
+    if (window.intlTelInput) { setupPhone(); return Promise.resolve(); }
+    phoneLoading = new Promise((resolve,reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/js/intlTelInput.min.js";
+      script.async = true;
+      script.onload = () => { setupPhone(); resolve(); };
+      script.onerror = () => { phoneLoading = null; reject(new Error("Unable to load the international phone selector.")); };
+      document.head.appendChild(script);
+    });
+    return phoneLoading;
   }
   function validatePhone() {
     const raw = phoneInput.value.trim();
-    const normalized = normalizeIndianPhone(raw);
-    const invalid = !!raw && !normalized;
-    phoneInput.setCustomValidity(invalid ? "Enter a valid 10-digit Indian mobile number (optional +91)." : "");
+    const country = internationalPhone?.getSelectedCountryData()?.iso2 || "in";
+    const digits = raw.replace(/[\s().-]/g, "");
+    const ok = phoneReady && internationalPhone?.isValidNumber() &&
+      (country !== "in" || /^[6-9][0-9]{9}$/.test(digits.replace(/^\+91/, "")));
+    const invalid = !!raw && !ok;
+    phoneInput.setCustomValidity(invalid ? "Enter a valid mobile number for the selected country." : "");
     phoneInput.setAttribute("aria-invalid", String(invalid));
     phoneHint.classList.toggle("invalid", invalid);
     phoneHint.textContent = invalid
-      ? "Invalid Indian mobile number. Use 10 digits starting with 6–9 (optional +91)."
-      : "10-digit Indian mobile number starting with 6–9; +91 optional.";
-    return normalized;
+      ? "Please check the country code and mobile number."
+      : "Choose your country and enter your mobile number; India (+91) is the default.";
+    return ok ? internationalPhone.getNumber() : null;
   }
   phoneInput.addEventListener("input", validatePhone);
   phoneInput.addEventListener("blur", validatePhone);
@@ -121,7 +149,7 @@
       result[key] = String(form.elements.namedItem(key).value || "").trim();
     }
     const normalizedPhone = validatePhone();
-    if (!normalizedPhone) throw new Error("Enter a valid 10-digit Indian mobile number.");
+    if (!normalizedPhone) throw new Error("Enter a valid mobile number for the selected country.");
     result.phone = normalizedPhone;
     if (Number(result.carpetArea) > Number(result.superBuiltUpArea)) {
       throw new Error("Carpet area cannot exceed super built-up area.");
@@ -236,6 +264,7 @@
     if (!dlg.open) dlg.showModal();
     document.body.classList.add("modal-open");
     loadTurnstile().catch(error => message(error.message));
+    loadPhone().catch(error => message(error.message));
   });
   function close() { if (!busy) dlg.close(); }
   document.getElementById("sell-close").addEventListener("click",close);
