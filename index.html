@@ -75,6 +75,10 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 .sell-form input,.sell-form select,.sell-form textarea{font:inherit;padding:10px;border:1px solid #b8c7b0;border-radius:6px;min-width:0;width:100%;background:#fff;color:var(--ink)}
 .sell-wide{grid-column:1/-1}.sell-note{font-size:12px;color:var(--muted);margin:0}
 .sell-form .iti{width:100%}#sell-dialog{overflow:visible}#sell-dialog .iti__dropdown-content{z-index:10000}
+/* Keep intl-tel-input's search icon separate from the typed country name. */
+.sell-form .iti__search-input{padding-left:42px!important;padding-right:38px!important}
+/* Preserve the honeypot without rendering it to visitors. */
+.sell-form label[hidden]{display:none!important}
 .sell-phone-hint{font-size:12px;font-weight:400;color:var(--muted);line-height:1.4}.sell-phone-hint.invalid{color:#a12626}.sell-form input[aria-invalid="true"]{border-color:#a12626}
 .sell-action{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 @media(max-width:600px){.sell-form{grid-template-columns:1fr}}
