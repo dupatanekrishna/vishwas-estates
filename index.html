@@ -71,7 +71,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 
 .sell-header-logo{width:52px;height:48px;object-fit:contain;flex:0 0 auto;border-radius:6px}.sell-form .sell-consent{display:flex;gap:8px;align-items:flex-start}.sell-form .sell-consent input{width:auto;margin-top:4px}.sell-button{background:var(--mustard);color:var(--ink);border:1px solid #b69d4b}.sell-button:hover{background:#e7d184}
 .sell-form{padding:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;max-height:calc(100dvh - 165px);overflow:auto}
-.sell-form label{display:grid;gap:5px;font-weight:600;font-size:14px}
+.sell-form label{display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:14px;min-width:0}.sell-form>label:not(.sell-wide){justify-content:flex-start}.sell-form>label:not(.sell-wide)>input,.sell-form>label:not(.sell-wide)>select{min-height:46px}
 .sell-form input,.sell-form select,.sell-form textarea{font:inherit;padding:10px;border:1px solid #b8c7b0;border-radius:6px;min-width:0;width:100%;background:#fff;color:var(--ink)}
 .sell-wide{grid-column:1/-1}.sell-note{font-size:12px;color:var(--muted);margin:0}
 .sell-form .iti{width:100%}#sell-dialog{overflow:visible}#sell-dialog .iti__dropdown-content{z-index:10000}
@@ -79,7 +79,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 .sell-form .iti__search-input{padding-left:42px!important;padding-right:38px!important}
 /* Preserve the honeypot without rendering it to visitors. */
 .sell-form label[hidden]{display:none!important}
-.sell-phone-hint{font-size:12px;font-weight:400;color:var(--muted);line-height:1.4}.sell-phone-hint.invalid{color:#a12626}.sell-form input[aria-invalid="true"]{border-color:#a12626}
+.sell-phone-hint{font-size:12px;font-weight:400;color:var(--muted);line-height:1.4} .sell-form .sell-price-hint,.sell-form .sell-remarks-count{font-size:12px;font-weight:400;color:var(--muted)}.sell-phone-hint.invalid{color:#a12626}.sell-form input[aria-invalid="true"]{border-color:#a12626}
 .sell-action{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 @media(max-width:600px){.sell-form{grid-template-columns:1fr}}
 </style>
@@ -125,13 +125,13 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
   <label>Email (optional)<input name="email" type="email" autocomplete="email" maxlength="200"></label>
   <label>Project / Property name *<input name="projectName" maxlength="160" required></label>
   <label>Configuration / topology *<input name="configuration" placeholder="2 BHK / Villa / Plot" maxlength="150" required></label>
-  <label>Asking price (INR) *<input name="askingPrice" type="number" min="1" step="1" required></label>
-  <label>Super built-up area (sq ft) *<input name="superBuiltUpArea" type="number" min="0.01" step="0.01" required></label>
-  <label>Carpet area (sq ft) *<input name="carpetArea" type="number" min="0.01" step="0.01" required></label>
+  <label>Asking price (INR) *<input name="askingPrice" type="text" inputmode="numeric" maxlength="18" placeholder="e.g. 25,00,000" pattern="[0-9,]+" required><span class="sell-price-hint">Example: ₹25,00,000 (25 lakh)</span></label>
+  <label>Super built-up area (sq ft) *<input name="superBuiltUpArea" type="number" min="1" step="1" placeholder="e.g. 1200" required></label>
+  <label>Carpet area (sq ft) *<input name="carpetArea" type="number" min="1" step="1" placeholder="e.g. 950" required></label>
   <label>Project status *<select name="projectStatus" required><option value="">Select status</option><option>Pre-launch</option><option>Under construction</option><option>Ready to move</option><option>Resale</option></select></label>
-  <label>Project start date<input name="projectStartDate" type="date"></label>
+  <label>Project start date (optional)<input name="projectStartDate" type="date" min="1900-01-01" max="2100-12-31"></label>
   <label>Location *<input name="location" maxlength="200" required></label>
-  <label class="sell-wide">Remarks<textarea name="remarks" rows="3" maxlength="2000"></textarea></label>
+  <label class="sell-wide">Remarks<textarea name="remarks" rows="2" maxlength="2000" placeholder="Any additional property details (optional)"></textarea><span id="sell-remarks-count" class="sell-remarks-count">0 / 2,000 characters</span></label>
   <label class="sell-wide">Floor plan / Photos / Videos<input id="sell-files" type="file" name="files" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.mp4,.webm,image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"><span class="sell-note">Maximum 10 files / 200 MB total; each image or PDF up to 10 MB, video up to 100 MB.</span></label>
   <label class="sell-wide sell-consent"><input type="checkbox" id="sell-consent" name="consent" required><span>I consent to Visvasa Estates using my property details and attachments to respond to my enquiry. *</span></label>
   <label hidden>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
