@@ -94,11 +94,35 @@
     if (total > 200 * MiB) throw new Error("Total attachment size must not exceed 200 MiB.");
     return result;
   }
+  const phoneInput = form.elements.namedItem("phone");
+  const phoneHint = document.getElementById("sell-phone-hint");
+  function normalizeIndianPhone(value) {
+    const stripped = String(value || "").replace(/[\s()-]/g, "");
+    const local = stripped.startsWith("+91") ? stripped.slice(3) : stripped;
+    return /^[6-9][0-9]{9}$/.test(local) ? local : null;
+  }
+  function validatePhone() {
+    const raw = phoneInput.value.trim();
+    const normalized = normalizeIndianPhone(raw);
+    const invalid = !!raw && !normalized;
+    phoneInput.setCustomValidity(invalid ? "Enter a valid 10-digit Indian mobile number (optional +91)." : "");
+    phoneInput.setAttribute("aria-invalid", String(invalid));
+    phoneHint.classList.toggle("invalid", invalid);
+    phoneHint.textContent = invalid
+      ? "Invalid Indian mobile number. Use 10 digits starting with 6–9 (optional +91)."
+      : "10-digit Indian mobile number starting with 6–9; +91 optional.";
+    return normalized;
+  }
+  phoneInput.addEventListener("input", validatePhone);
+  phoneInput.addEventListener("blur", validatePhone);
   function details() {
     const result = {};
     for (const key of fieldNames) {
       result[key] = String(form.elements.namedItem(key).value || "").trim();
     }
+    const normalizedPhone = validatePhone();
+    if (!normalizedPhone) throw new Error("Enter a valid 10-digit Indian mobile number.");
+    result.phone = normalizedPhone;
     if (Number(result.carpetArea) > Number(result.superBuiltUpArea)) {
       throw new Error("Carpet area cannot exceed super built-up area.");
     }
@@ -225,6 +249,7 @@
   form.addEventListener("submit",async event => {
     event.preventDefault();
     if (busy || completed) return;
+    if (!session) validatePhone();
     if (!session && (!form.reportValidity() || !consent.checked || !turnstileToken)) {
       message("Complete all required fields, consent and the security check.");
       return;
