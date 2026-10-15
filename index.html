@@ -68,6 +68,14 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 .contact .support-heading::after{content:'';display:block;width:48px;height:3px;margin:12px auto 0;border-radius:2px;background:var(--mustard)}
 .buy-button{background:#c4dda9;color:#253b2b;border:1px solid #90bc79}.buy-button:hover{background:#b2cf94}
 .button.whatsapp-button{background:#c4dda9;color:#253b2b;border:1px solid #90bc79;gap:14px}.button.whatsapp-button:hover{background:#b2cf94}
+
+.sell-button{background:var(--mustard);color:var(--ink);border:1px solid #b69d4b}.sell-button:hover{background:#e7d184}
+.sell-form{padding:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;max-height:calc(100dvh - 165px);overflow:auto}
+.sell-form label{display:grid;gap:5px;font-weight:600;font-size:14px}
+.sell-form input,.sell-form textarea{font:inherit;padding:10px;border:1px solid #b8c7b0;border-radius:6px;min-width:0;width:100%;background:#fff;color:var(--ink)}
+.sell-wide{grid-column:1/-1}.sell-note{font-size:12px;color:var(--muted);margin:0}
+.sell-action{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+@media(max-width:600px){.sell-form{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -86,7 +94,7 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 <noscript><p>Enable JavaScript to search builder websites on this page.</p></noscript>
 </section>
 
-<section class="wrap hero" aria-labelledby="hero-title"><div><p class="eyebrow">A personal approach to property</p><h1 id="hero-title">Trust Built<br><em>in Person.</em></h1><p class="intro">Every property journey starts with a conversation.<br>Tell us what you’re looking for.</p><div class="actions"><button class="buy-button" type="button" data-open data-buy>Buy <span aria-hidden="true">↗</span></button><button type="button" data-open>Sell <span aria-hidden="true">↗</span></button><a class="text-link" href="#property">Explore enquiries ↓</a></div><p class="hero-caption">ವಿಶ್ವಾಸ Estates · by Vishwanath E</p></div>
+<section class="wrap hero" aria-labelledby="hero-title"><div><p class="eyebrow">A personal approach to property</p><h1 id="hero-title">Trust Built<br><em>in Person.</em></h1><p class="intro">Every property journey starts with a conversation.<br>Tell us what you’re looking for.</p><div class="actions"><button class="buy-button" type="button" data-open data-buy>Buy <span aria-hidden="true">↗</span></button><button type="button" id="sell-open" class="sell-button">Sell <span aria-hidden="true">↗</span></button><a class="text-link" href="#property">Explore enquiries ↓</a></div><p class="hero-caption">ವಿಶ್ವಾಸ Estates · by Vishwanath E</p></div>
 <div class="scene" aria-hidden="true"><svg viewBox="0 0 480 360" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="349" cy="91" r="48" fill="#DAC679"/><path d="M0 279Q145 214 283 276T480 253V360H0Z" fill="#BDCCA9"/><path d="M46 307L153 275L423 296L312 344Z" fill="#9DAD86"/><path d="M160 163L304 136L384 178L241 207Z" fill="#F8F6E9"/><path d="M160 163V285L241 324V207Z" fill="#D8D6BF"/><path d="M241 207L384 178V291L241 324Z" fill="#F6F1DC"/><path d="M151 157L303 125L396 176L384 186L303 144L160 173Z" fill="#617451"/><path d="M184 201L220 218V275L184 258Z" fill="#6B7C5D"/><path d="M264 224L309 215V307L264 317Z" fill="#708360"/><path d="M326 211L364 204V251L326 259Z" fill="#9EB299"/><path d="M345 208V255M326 234L364 227" stroke="#F8F3DF" stroke-width="4"/><path d="M193 205V262" stroke="#C2CBB5" stroke-width="3"/><path d="M86 213V304M111 188V299" stroke="#667A51" stroke-width="5"/><ellipse cx="87" cy="198" rx="28" ry="48" fill="#94AD7D"/><ellipse cx="112" cy="170" rx="32" ry="55" fill="#A9BD8D"/><path d="M411 266V310" stroke="#667A51" stroke-width="4"/><circle cx="412" cy="257" r="22" fill="#8FA578"/><path d="M263 321L309 309L350 360H300Z" fill="#E5DEC0"/></svg><p class="scene-label"><span>Space for new beginnings</span><span>ವಿಶ್ವಾಸ</span></p></div></section>
 <div class="ribbon"><div class="wrap"><span>Your plans, your priorities</span><span>A conversation comes first</span><span>Take the next step at your pace</span></div></div>
 <section id="property" class="wrap section"><div class="section-top"><div><p class="eyebrow">Start with what matters to you</p><h2>What are you looking for?</h2></div><p>Share the kind of property you have in mind, your preferred location and your budget.</p></div><div class="cards"><article class="card"><span class="number">01</span><h3>A place to call home</h3><p>Looking for a house or an apartment? Tell us about the space, neighbourhood and lifestyle you have in mind.</p><button type="button" data-open>Enquire about a home <span aria-hidden="true">↗</span></button></article><article class="card"><span class="number">02</span><h3>Land for your plans</h3><p>Considering a plot or land? Start with your preferred area, approximate size and plans for the property.</p><button type="button" data-open>Share your land requirement <span aria-hidden="true">↗</span></button></article><article class="card"><span class="number">03</span><h3>A property to discuss</h3><p>Have a property to sell or a different requirement? Share the details and the best way to get in touch.</p><button type="button" data-open>Start a conversation <span aria-hidden="true">↗</span></button></article></div><p class="availability">These are enquiry categories. Individual property listings and availability will be shared separately.</p></section>
@@ -101,6 +109,37 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 <iframe id="google-form" title="ವಿಶ್ವಾಸ Estates property enquiry form" src="https://docs.google.com/forms/d/e/1FAIpQLSfDvDgx5pJcWxITwi0FN5nJac0ENkmvSmlsEd2OsWekd3jNWA/viewform?embedded=true"></iframe>
 <div class="modal-foot"><a class="fallback" href="https://forms.gle/XMmygcHWyMQBwqot8" target="_blank" rel="noopener noreferrer">Form not loading? Open in a new tab ↗</a><button class="secondary" id="skip" type="button">Skip &amp; Browse</button></div>
 </dialog>
+
+<dialog id="sell-dialog" aria-labelledby="sell-title">
+ <div class="modal-head"><div><h2 id="sell-title">List your property for sale</h2><p class="hint">Share property information securely with Visvasa Estates.</p></div><button type="button" class="close" id="sell-close" aria-label="Close sell form">×</button></div>
+ <form id="sell-form" class="sell-form">
+  <label>Name *<input name="name" maxlength="120" autocomplete="name" required></label>
+  <label>Phone *<input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" required></label>
+  <label>Email *<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+  <label>Project / Property name *<input name="projectName" maxlength="160" required></label>
+  <label>Configuration / topology *<input name="configuration" placeholder="2 BHK / Villa / Plot" maxlength="150" required></label>
+  <label>Asking price (INR) *<input name="askingPrice" type="number" min="1" step="1" required></label>
+  <label>Super built-up area (sq ft)<input name="superBuiltUpArea" type="number" min="0" step="0.01"></label>
+  <label>Carpet area (sq ft)<input name="carpetArea" type="number" min="0" step="0.01"></label>
+  <label>Project start date<input name="projectStartDate" type="date"></label>
+  <label>Location *<input name="location" maxlength="200" required></label>
+  <label class="sell-wide">Remarks<textarea name="remarks" rows="3" maxlength="2000"></textarea></label>
+  <label class="sell-wide">Floor plan / Photos / Videos<input id="sell-files" type="file" name="files" multiple accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/quicktime"><span class="sell-note">Uploads will be enabled after confirming the backend file-upload contract.</span></label>
+  <p class="sell-wide sell-note" id="sell-status" role="status" aria-live="polite">Secure submission integration pending API verification. The form does not send data yet.</p>
+  <div class="sell-wide sell-action"><button id="sell-submit" type="submit" disabled>Submit property</button><button class="secondary" type="button" id="sell-cancel">Cancel</button><a href="mailto:visvasaestates@dkalki.com?subject=Property%20selling%20enquiry">Email us ↗</a></div>
+ </form>
+</dialog>
+<script>
+(()=>{
+ const dlg=document.getElementById('sell-dialog'),trigger=document.getElementById('sell-open');
+ trigger.addEventListener('click',()=>{dlg.showModal();document.body.classList.add('modal-open')});
+ const close=()=>dlg.close();
+ document.getElementById('sell-close').addEventListener('click',close);
+ document.getElementById('sell-cancel').addEventListener('click',close);
+ dlg.addEventListener('close',()=>{document.body.classList.remove('modal-open');trigger.focus()});
+ document.getElementById('sell-form').addEventListener('submit',e=>e.preventDefault());
+})();
+</script>
 <script>
 const modal = document.getElementById('enquiry');
 let returnFocus = document.querySelector('[data-open]');
