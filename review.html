@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Private property review | Visvasa Estates</title>
+<style>
+:root{font-family:Arial,sans-serif;color:#253b2b;background:#fafbf6}
+*{box-sizing:border-box}body{margin:0}header{background:#f3f7ed;border-bottom:4px solid #d9bf65;padding:20px}
+main{max-width:920px;margin:32px auto;padding:0 18px}h1{font-family:Georgia,serif}
+#details{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px}
+article{border:1px solid #dfe5d8;background:white;border-radius:9px;padding:14px;overflow-wrap:anywhere}
+small{display:block;color:#5c695d;margin-bottom:5px}button,a{color:#253b2b}
+.media{max-width:100%;max-height:440px;display:block;margin-top:12px}
+#files{display:grid;gap:14px;margin-top:20px}.error{color:#a32222}
+</style>
+</head><body><header><strong>Visvasa Estates</strong> · Private property review</header>
+<main><h1>Property submission</h1><p id="status" role="status">Checking your private access link…</p><section id="details" aria-label="Seller and property details"></section><h2>Attachments</h2><section id="files" aria-label="Uploaded files"></section></main>
+<script>
+(() => {
+  "use strict";
+  const API = "https://508tvgngdd.execute-api.ap-south-1.amazonaws.com";
+  const status = document.getElementById("status");
+  const details = document.getElementById("details");
+  const files = document.getElementById("files");
+  // Remove credentials from the URL before any other requests.
+  const params = new URLSearchParams(location.hash.replace(/^#/,""));
+  const id = params.get("id"), token = params.get("token");
+  history.replaceState(null,"",location.pathname);
+  const allowedId = /^[a-f0-9]{32}$/;
+  const names = {
+    name:"Name",phone:"Phone",email:"Email",projectName:"Project name",
+    configuration:"Configuration / typology",superBuiltUpArea:"Super built-up area (sq ft)",
+    carpetArea:"Carpet area (sq ft)",askingPrice:"Asking price (INR)",
+    projectStatus:"Project status",location:"Property location",
+    projectStartDate:"Project start date",remarks:"Remarks"
+  };
+  function showError(message) { status.className="error";status.textContent=message; }
+  if (!allowedId.test(id || "") || !token || !/^[a-f0-9]{64}$/.test(token)) {
+    showError("Invalid or incomplete access link.");return;
+  }
+  async function request(path) {
+    const res=await fetch(API+path,{
+      cache:"no-store",referrerPolicy:"no-referrer",
+      headers:{"Authorization":"Bearer "+token}
+    });
+    if (!res.ok) throw new Error(res.status===403?"This private link has expired or is invalid.":"Unable to load submission (HTTP "+res.status+").");
+    return res.json();
+  }
+  function field(title,value) {
+    const box=document.createElement("article");
+    const label=document.createElement("small");label.textContent=title;
+    const content=document.createElement("div");content.textContent=String(value ?? "");
+    box.append(label,content);return box;
+  }
+  const path="/review/"+encodeURIComponent(id);
+  request(path).then(data => {
+    status.textContent="Private listing reference: "+id+". Review access lasts seven days after submission.";
+    for (const [key,title] of Object.entries(names)) {
+      details.appendChild(field(title,data.details?.[key] || ""));
+    }
+    if (!Array.isArray(data.files)||!data.files.length) {
+      files.textContent="No attachments were provided.";return;
+    }
+    for (const file of data.files) {
+      const article=document.createElement("article");
+      const label=document.createElement("strong");label.textContent=file.name || "Attachment";
+      const info=document.createElement("p");info.textContent=(file.type || "")+" · "+Math.round((file.size||0)/1024)+" KB";
+      const button=document.createElement("button");button.type="button";button.textContent="Load attachment";
+      article.append(label,info,button);files.append(article);
+      button.addEventListener("click",async () => {
+        button.disabled=true;button.textContent="Loading…";
+        try {
+          const result=await request(path+"/files/"+encodeURIComponent(file.fileId));
+          const url=new URL(result.url);
+          if (url.protocol!=="https:") throw new Error("Unexpected attachment URL.");
+          const link=document.createElement("a");
+          link.href=url.href;link.target="_blank";link.rel="noreferrer noopener";
+          link.textContent=file.type==="application/pdf"?"Download PDF":"Open attachment in new tab";
+          article.append(link);
+          if (file.type.startsWith("image/")) {
+            const img=document.createElement("img");img.className="media";img.alt=file.name;img.referrerPolicy="no-referrer";img.src=url.href;article.append(img);
+          } else if (file.type.startsWith("video/")) {
+            const video=document.createElement("video");video.className="media";
+            video.controls=true;video.preload="none";video.referrerPolicy="no-referrer";video.src=url.href;article.append(video);
+          }
+          button.remove();
+          const note=document.createElement("p");
+          note.textContent="Temporary file access expires in approximately 15 minutes.";
+          article.append(note);
+        } catch (error) {
+          info.textContent=error.message;
+          button.disabled=false;button.textContent="Retry attachment";
+        }
+      });
+    }
+  }).catch(error=>showError(error.message));
+})();
+</script></body></html>
