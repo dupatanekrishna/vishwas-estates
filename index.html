@@ -69,10 +69,10 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 .buy-button{background:#c4dda9;color:#253b2b;border:1px solid #90bc79}.buy-button:hover{background:#b2cf94}
 .button.whatsapp-button{background:#c4dda9;color:#253b2b;border:1px solid #90bc79;gap:14px}.button.whatsapp-button:hover{background:#b2cf94}
 
-.sell-button{background:var(--mustard);color:var(--ink);border:1px solid #b69d4b}.sell-button:hover{background:#e7d184}
+.sell-header-logo{width:52px;height:48px;object-fit:contain;flex:0 0 auto;border-radius:6px}.sell-form .sell-consent{display:flex;gap:8px;align-items:flex-start}.sell-form .sell-consent input{width:auto;margin-top:4px}.sell-button{background:var(--mustard);color:var(--ink);border:1px solid #b69d4b}.sell-button:hover{background:#e7d184}
 .sell-form{padding:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;max-height:calc(100dvh - 165px);overflow:auto}
 .sell-form label{display:grid;gap:5px;font-weight:600;font-size:14px}
-.sell-form input,.sell-form textarea{font:inherit;padding:10px;border:1px solid #b8c7b0;border-radius:6px;min-width:0;width:100%;background:#fff;color:var(--ink)}
+.sell-form input,.sell-form select,.sell-form textarea{font:inherit;padding:10px;border:1px solid #b8c7b0;border-radius:6px;min-width:0;width:100%;background:#fff;color:var(--ink)}
 .sell-wide{grid-column:1/-1}.sell-note{font-size:12px;color:var(--muted);margin:0}
 .sell-action{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 @media(max-width:600px){.sell-form{grid-template-columns:1fr}}
@@ -111,35 +111,29 @@ body.gsc-overflow-hidden:not(.modal-open){overflow:auto!important}
 </dialog>
 
 <dialog id="sell-dialog" aria-labelledby="sell-title">
- <div class="modal-head"><div><h2 id="sell-title">List your property for sale</h2><p class="hint">Share property information securely with Visvasa Estates.</p></div><button type="button" class="close" id="sell-close" aria-label="Close sell form">×</button></div>
+ <div class="modal-head"><img class="sell-header-logo" src="assets/vishwas-estates-logo.jpg" alt="Visvasa Estates logo" width="52" height="48"><div><h2 id="sell-title">List your property for sale</h2><p class="hint">Share property information securely with Visvasa Estates.</p></div><button type="button" class="close" id="sell-close" aria-label="Close sell form">×</button></div>
  <form id="sell-form" class="sell-form">
   <label>Name *<input name="name" maxlength="120" autocomplete="name" required></label>
   <label>Phone *<input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" required></label>
-  <label>Email *<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+  <label>Email (optional)<input name="email" type="email" autocomplete="email" maxlength="200"></label>
   <label>Project / Property name *<input name="projectName" maxlength="160" required></label>
   <label>Configuration / topology *<input name="configuration" placeholder="2 BHK / Villa / Plot" maxlength="150" required></label>
   <label>Asking price (INR) *<input name="askingPrice" type="number" min="1" step="1" required></label>
-  <label>Super built-up area (sq ft)<input name="superBuiltUpArea" type="number" min="0" step="0.01"></label>
-  <label>Carpet area (sq ft)<input name="carpetArea" type="number" min="0" step="0.01"></label>
+  <label>Super built-up area (sq ft) *<input name="superBuiltUpArea" type="number" min="0.01" step="0.01" required></label>
+  <label>Carpet area (sq ft) *<input name="carpetArea" type="number" min="0.01" step="0.01" required></label>
+  <label>Project status *<select name="projectStatus" required><option value="">Select status</option><option>Pre-launch</option><option>Under construction</option><option>Ready to move</option><option>Resale</option></select></label>
   <label>Project start date<input name="projectStartDate" type="date"></label>
   <label>Location *<input name="location" maxlength="200" required></label>
   <label class="sell-wide">Remarks<textarea name="remarks" rows="3" maxlength="2000"></textarea></label>
-  <label class="sell-wide">Floor plan / Photos / Videos<input id="sell-files" type="file" name="files" multiple accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/quicktime"><span class="sell-note">Uploads will be enabled after confirming the backend file-upload contract.</span></label>
-  <p class="sell-wide sell-note" id="sell-status" role="status" aria-live="polite">Secure submission integration pending API verification. The form does not send data yet.</p>
+  <label class="sell-wide">Floor plan / Photos / Videos<input id="sell-files" type="file" name="files" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.mp4,.webm,image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"><span class="sell-note">Maximum 10 files / 200 MB total; each image or PDF up to 10 MB, video up to 100 MB.</span></label>
+  <label class="sell-wide sell-consent"><input type="checkbox" id="sell-consent" name="consent" required><span>I consent to Visvasa Estates using my property details and attachments to respond to my enquiry. *</span></label>
+  <label hidden>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+  <div class="sell-wide" id="sell-turnstile" aria-label="Bot protection"></div>
+  <p class="sell-wide sell-note" id="sell-status" role="status" aria-live="polite">Complete the form and security check to submit.</p>
   <div class="sell-wide sell-action"><button id="sell-submit" type="submit" disabled>Submit property</button><button class="secondary" type="button" id="sell-cancel">Cancel</button><a href="mailto:visvasaestates@dkalki.com?subject=Property%20selling%20enquiry">Email us ↗</a></div>
  </form>
 </dialog>
-<script>
-(()=>{
- const dlg=document.getElementById('sell-dialog'),trigger=document.getElementById('sell-open');
- trigger.addEventListener('click',()=>{dlg.showModal();document.body.classList.add('modal-open')});
- const close=()=>dlg.close();
- document.getElementById('sell-close').addEventListener('click',close);
- document.getElementById('sell-cancel').addEventListener('click',close);
- dlg.addEventListener('close',()=>{document.body.classList.remove('modal-open');trigger.focus()});
- document.getElementById('sell-form').addEventListener('submit',e=>e.preventDefault());
-})();
-</script>
+<script src="assets/sell-form.js" defer></script>
 <script>
 const modal = document.getElementById('enquiry');
 let returnFocus = document.querySelector('[data-open]');
